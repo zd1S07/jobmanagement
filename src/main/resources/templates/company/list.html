@@ -17,6 +17,8 @@
 		<!-- 企業追加ボタン -->
 		<button type="button" class="btn btn-primary" data-toggle="modal"
 			data-target="#addCompanyModal">企業追加</button>
+			
+			<h5>※面接情報が追加されている場合には操作の部分の<span class='btn btn-info'>面接情報</span>を押すと下部に表示されます<br>非表示にしたい場合はもう一度押してください。</h5>
 
 		<div th:if="${message}" class="alert alert-success">
 			<p th:text="${message}"></p>

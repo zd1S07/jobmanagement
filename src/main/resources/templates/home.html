@@ -32,7 +32,11 @@
 		<p class="large-text"
 			th:text="'今日は ' + ${today} + ' ' + ${dayOfWeek} + ' です。'"></p>
 
-		<h5 class="right-align">表示日数の設定</h5>
+
+		<!-- 間近になっている面接リスト -->
+		<h2>間近になっている面接</h2>
+
+		<h5 class="right-align">表示日数の設定(デフォルトの設定では3日になっています)</h5>
 		<form action="#" method="get" class="right-align">
 			<label for="notificationDays">何日前までの面接を表示しますか？</label> <select
 				name="daysUntilNotification" id="notificationDays">
@@ -43,30 +47,47 @@
 			<button type="submit" class="btn btn-primary">更新</button>
 		</form>
 
-		<!-- 間近になっている面接リスト -->
-		<h2>間近になっている面接</h2>
 		<div
 			th:if="${upcomingInterviews != null and !#lists.isEmpty(upcomingInterviews)}">
-			<ul>
-				<li th:each="interview : ${upcomingInterviews}"><span
-					th:text="${interview.interviewDate} + ' ' + ${interview.startTime}"></span>
-					<span> - </span> <span th:text="${interview.company.name}"></span>
-					<span> - </span> <span> <a
-						th:if="${#strings.startsWith(interview.location, 'http')}"
-						th:href="${interview.location}" target="_blank" th:text="'会議URL'"></a>
-						<span th:if="${!#strings.startsWith(interview.location, 'http')}">
-							<a
-							th:href="'https://www.google.com/maps/search/?api=1&query=' + ${interview.location}"
-							target="_blank" th:text="${interview.location}"></a>
-					</span>
-				</span></li>
-			</ul>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>日付</th>
+						<th>企業名</th>
+						<th>開始時間</th>
+						<th>終了時間</th>
+						<th>場所(会議URL)</th>
+						<th>職種</th>
+						<th>状況</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="interview : ${upcomingInterviews}">
+						<td th:text="${interview.interviewDate}"></td>
+						<td th:text="${interview.company.name}"></td>
+						<td th:text="${interview.startTime}"></td>
+						<td th:text="${interview.endTime}"></td>
+
+						<td><a
+							th:if="${#strings.startsWith(interview.location, 'http')}"
+							th:href="${interview.location}" target="_blank" th:text="'会議URL'"></a>
+							<span th:if="${!#strings.startsWith(interview.location, 'http')}">
+								<a
+								th:href="'https://www.google.com/maps/search/?api=1&query=' + ${interview.location}"
+								target="_blank" th:text="${interview.location}"></a>
+						</span></td>
+						<td th:text="${interview.jobTitle}"></td>
+						<td th:text="${interview.selectionStatus}"></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 		<div
 			th:if="${upcomingInterviews == null or #lists.isEmpty(upcomingInterviews)}">
 			<p>間近になっている面接はありません。</p>
 		</div>
 	</div>
+
 
 
 
@@ -136,7 +157,7 @@
 			<button class="btn btn-secondary" onclick="closeAddModal()">キャンセル</button>
 		</div>
 
-
+		<h5>※締切日が1週間を切っている情報は<span class='table-warning'>背景色がこの色に変わります</span></h5>
 		<!-- お気に入り求人の一覧テーブル -->
 		<div th:if="${favoriteJobs != null && !favoriteJobs.isEmpty()}">
 			<table class="table">

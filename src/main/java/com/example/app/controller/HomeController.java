@@ -51,9 +51,10 @@ public class HomeController {
 	}
 	@GetMapping("/home")
 	public String showHomePage(Model model, Authentication authentication,
-	        @RequestParam(name = "daysUntilNotification", defaultValue = "3") int daysUntilNotification,
+	        @RequestParam(name = "daysUntilNotification", required = false) Integer daysUntilNotification,
 	        @RequestParam(name = "sort", defaultValue = "added") String sort,
 	        HttpSession session) {
+
 	    // CustomUserDetailsにキャストしてユーザーIDを取得
 	    CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 	    Long userId = userDetails.getId(); // IDを取得
@@ -61,6 +62,19 @@ public class HomeController {
 
 	    // ユーザーIDをセッションに保存
 	    session.setAttribute("userId", userId);
+
+	    // daysUntilNotificationをセッションから取得、なければデフォルト値を使用
+	    if (daysUntilNotification != null) {
+	        // 新しい選択日数をセッションに保存
+	        session.setAttribute("daysUntilNotification", daysUntilNotification);
+	    } else {
+	        // セッションから取得またはデフォルト値の3を設定
+	        daysUntilNotification = (Integer) session.getAttribute("daysUntilNotification");
+	        if (daysUntilNotification == null) {
+	            daysUntilNotification = 3;
+	            session.setAttribute("daysUntilNotification", daysUntilNotification);
+	        }
+	    }
 
 	    // 今日の日付と曜日を取得し、フォーマット
 	    LocalDate today = LocalDate.now();
@@ -90,7 +104,7 @@ public class HomeController {
 	    model.addAttribute("upcomingInterviews", upcomingInterviews);
 
 	    // 通知日数オプションと選択値をモデルに追加
-	    model.addAttribute("notificationDaysOptions", List.of(1, 3, 5, 7));
+	    model.addAttribute("notificationDaysOptions", List.of(1,2,3,4,5,6,7));
 	    model.addAttribute("daysUntilNotification", daysUntilNotification);
 
 	    return "home";
