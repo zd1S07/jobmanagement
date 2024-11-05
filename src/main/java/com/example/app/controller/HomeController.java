@@ -52,7 +52,7 @@ public class HomeController {
 	@GetMapping("/home")
 	public String showHomePage(Model model, Authentication authentication,
 	        @RequestParam(name = "daysUntilNotification", required = false) Integer daysUntilNotification,
-	        @RequestParam(name = "sort", defaultValue = "added") String sort,
+	        @RequestParam(name = "sort", defaultValue = "deadline") String sort, // デフォルトを締切日に変更
 	        HttpSession session) {
 
 	    // CustomUserDetailsにキャストしてユーザーIDを取得
@@ -109,6 +109,7 @@ public class HomeController {
 
 	    return "home";
 	}
+
 
 
 

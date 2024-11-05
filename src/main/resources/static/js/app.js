@@ -1,45 +1,44 @@
+
+
+
 // 削除ボタンの処理
 document.querySelectorAll(".delete-btn").forEach(button => {
-	button.addEventListener("click", e => {
-		// `data-href`から削除URLを取得し、削除確認ボタンに設定
-		const href = e.target.getAttribute("data-href");
-		document.getElementById("delete-yes").setAttribute("href", href);
+    button.addEventListener("click", e => {
+        const href = e.target.getAttribute("data-href");
+        
+        // モーダルの"はい"ボタンにクリックイベントを追加
+        document.getElementById("delete-yes").onclick = function () {
+            window.location.href = href; // 削除処理
+        };
 
-		// モーダルを表示
-		document.getElementById("confirm-delete-modal").style.display = "block";
-	});
+        // モーダルを表示
+        const modal = new bootstrap.Modal(document.getElementById("confirm-delete-modal"));
+        modal.show();
+    });
 });
-
-// モーダルを閉じる関数
-function closeModal() {
-	document.getElementById("confirm-delete-modal").style.display = "none";
-}
-
-
-
 
 // 面接企業情報に追加ボタンの処理
 document.querySelectorAll(".add-interview-btn").forEach(button => {
-	button.addEventListener("click", e => {
-		const companyName = e.target.getAttribute("data-company-name"); // 会社名を取得
-		const userId = e.target.getAttribute("data-user-id");
-		const url = e.target.getAttribute("data-href"); // URLを取得
+    button.addEventListener("click", e => {
+        const companyName = e.target.getAttribute("data-company-name");
+        const url = e.target.getAttribute("data-href");
 
-		// モーダルに会社名を表示
-		document.getElementById("add-company-name").textContent = `${companyName}を面接企業情報に追加してよろしいですか？`;
+        // モーダルに会社名を表示
+        document.getElementById("add-company-name").textContent = `${companyName}を面接企業情報に追加してよろしいですか？`;
 
-		// 追加ボタンにhref属性を設定
-		document.getElementById("add-yes").setAttribute("href", url);
+        // モーダルの"はい"ボタンにクリックイベントを追加
+        document.getElementById("add-yes").onclick = function () {
+            window.location.href = url; // 追加処理
+        };
 
-		// モーダルを表示
-		document.getElementById("confirm-add-modal").style.display = "block";
-	});
+        // モーダルを表示
+        const modal = new bootstrap.Modal(document.getElementById("confirm-add-modal"));
+        modal.show();
+    });
 });
 
-// モーダルを閉じる関数
-function closeAddModal() {
-	document.getElementById("confirm-add-modal").style.display = "none";
-}
+
+
 
 
 
@@ -144,22 +143,24 @@ $('#templateSelector').on('hidden.bs.modal', function() {
 function createEmail(templateType) {
 	let subject = "";
 	let body = "";
+	const contactPerson = window.selectedContactPerson || "採用担当者"; // 担当者情報がない場合は「採用担当者」
 
 	if (templateType === '書類送付') {
 		subject = "書類送付のお知らせ";
-		body = `${window.selectedCompanyName} ${window.selectedContactPerson}様\nお世話になっております。\n\n以下の書類を送付いたしますので、ご確認ください。\n\n- [書類名1]\n- [書類名2]\n\nご不明な点がございましたら、お気軽にお知らせください。\n\n何卒よろしくお願いいたします。\n\nユーザー名`;
+		body = `${window.selectedCompanyName} ${contactPerson}様\nお世話になっております。\n\n以下の書類を送付いたしますので、ご確認ください。\n\n- [書類名1]\n- [書類名2]\n\nご不明な点がございましたら、お気軽にお知らせください。\n\n何卒よろしくお願いいたします。\n\nユーザー名`;
 	} else if (templateType === '日程調整') {
 		subject = "日程調整のお願い";
-		body = `${window.selectedCompanyName} ${window.selectedContactPerson}様\nお世話になっております。\n\n面談の日程について、以下の候補をご提案いたします。\n\n- [候補日1]\n- [候補日2]\n- [候補日3]\n\nご都合はいかがでしょうか？お手数ですが、確認いただければ幸いです。\n\n何卒よろしくお願いいたします。\n\nユーザー名`;
+		body = `${window.selectedCompanyName} ${contactPerson}様\nお世話になっております。\n\n面談の日程について、以下の候補をご提案いたします。\n\n- [候補日1]\n- [候補日2]\n- [候補日3]\n\nご都合はいかがでしょうか？お手数ですが、確認いただければ幸いです。\n\n何卒よろしくお願いいたします。\n\nユーザー名`;
 	} else if (templateType === '御礼') {
 		subject = "御礼のメール";
-		body = `${window.selectedCompanyName} ${window.selectedContactPerson}様\nお世話になっております。\n\n先日はお忙しい中お時間をいただき、誠にありがとうございました。\nおかげさまで大変有意義な時間を過ごすことができました。\n\n引き続きよろしくお願いいたします。\n\n何かご不明な点があれば、いつでもお知らせください。\n\nユーザー名`;
+		body = `${window.selectedCompanyName} ${contactPerson}様\nお世話になっております。\n\n先日はお忙しい中お時間をいただき、誠にありがとうございました。\nおかげさまで大変有意義な時間を過ごすことができました。\n\n引き続きよろしくお願いいたします。\n\n何かご不明な点があれば、いつでもお知らせください。\n\nユーザー名`;
 	}
 
 	const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${window.selectedEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 	window.open(mailtoLink, '_blank');
 	closeTemplateSelector();
 }
+
 function toggleSidebar() {
 	const sidebar = document.getElementById('sidebar');
 	const mainContent = document.getElementById('main-content');

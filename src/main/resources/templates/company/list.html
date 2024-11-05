@@ -17,9 +17,13 @@
 		<!-- 企業追加ボタン -->
 		<button type="button" class="btn btn-primary" data-toggle="modal"
 			data-target="#addCompanyModal">企業追加</button>
-			
-			<h5>※面接情報が追加されている場合には操作の部分の<span class='btn btn-info'>面接情報</span>を押すと下部に表示されます<br>非表示にしたい場合はもう一度押してください。</h5>
 
+		<h5>
+			※面接情報が追加されている場合には操作の<span class='btn btn-info'>面接情報</span>を押すと下部に表示されます<br>非表示にしたい場合はもう一度押してください。
+		</h5>
+		<h5>
+			※企業を追加する際にメールアドレスを入力し登録している状態でメール部分をクリックすると<br>現在ログインしているGoogleのアカウントで簡単にGmailを作成できます。
+		</h5>
 		<div th:if="${message}" class="alert alert-success">
 			<p th:text="${message}"></p>
 		</div>
@@ -69,10 +73,13 @@
 							削除</button> <!-- 面接情報表示ボタン -->
 						<button class="btn btn-info" type="button" data-toggle="collapse"
 							th:attr="data-target='#interviewCollapse' + ${company.id}">
-							面接情報</button> <!-- 面接情報追加ボタン -->
+							面接<br>情報
+						</button> <!-- 面接情報追加ボタン -->
 						<button type="button" class="btn btn-primary" data-toggle="modal"
 							data-target="#addInterviewModal"
-							th:data-company-id="${company.id}">面接追加</button>
+							th:data-company-id="${company.id}">
+							面接<br>追加
+						</button>
 					</td>
 				</tr>
 
@@ -137,7 +144,7 @@
 											data-target="#deleteInterviewModal"
 											th:data-id="${interview.id}">削除</button>
 										<button type="button" class="btn btn-primary"
-											onclick="addInterviewToCalendar(event)">Googleカレンダー</button>
+											onclick="addInterviewToCalendar(event)">Google<br>カレンダー</button>
 									</td>
 								</tr>
 							</tbody>
@@ -145,8 +152,9 @@
 				</tr>
 			</tbody>
 		</table>
-		
 
+		<br>
+		<br>
 
 
 
@@ -221,20 +229,19 @@
 							</div>
 							<div class="form-group">
 								<label for="contactPerson">担当者</label> <input type="text"
-									class="form-control" id="contactPerson" name="contactPerson"
-									>
+									class="form-control" id="contactPerson" name="contactPerson">
 							</div>
 							<div class="form-group">
 								<label for="email">メール</label> <input type="email"
-									class="form-control" id="email" name="email" >
+									class="form-control" id="email" name="email">
 							</div>
 							<div class="form-group">
 								<label for="phone">電話</label> <input type="tel"
-									class="form-control" id="phone" name="phone" >
+									class="form-control" id="phone" name="phone">
 							</div>
 							<div class="form-group">
 								<label for="website">HP</label> <input type="url"
-									class="form-control" id="website" name="website" >
+									class="form-control" id="website" name="website">
 							</div>
 							<button type="submit" class="btn btn-primary">追加</button>
 						</form>
@@ -266,19 +273,19 @@
 							<div class="form-group">
 								<label for="updateContactPerson">担当者</label> <input type="text"
 									class="form-control" id="updateContactPerson"
-									name="contactPerson" >
+									name="contactPerson">
 							</div>
 							<div class="form-group">
 								<label for="updateEmail">メール</label> <input type="email"
-									class="form-control" id="updateEmail" name="email" >
+									class="form-control" id="updateEmail" name="email">
 							</div>
 							<div class="form-group">
 								<label for="updatePhone">電話</label> <input type="tel"
-									class="form-control" id="updatePhone" name="phone" >
+									class="form-control" id="updatePhone" name="phone">
 							</div>
 							<div class="form-group">
 								<label for="updateWebsite">ウェブサイト</label> <input type="url"
-									class="form-control" id="updateWebsite" name="website" >
+									class="form-control" id="updateWebsite" name="website">
 							</div>
 							<button type="submit" class="btn btn-primary">更新</button>
 						</form>
@@ -334,24 +341,23 @@
 							<input type="hidden" id="addInterviewCompanyId" name="companyId">
 							<div class="form-group">
 								<label for="interviewDate">日付</label> <input type="date"
-									class="form-control" id="interviewDate" name="interviewDate"
-									>
+									class="form-control" id="interviewDate" name="interviewDate">
 							</div>
 							<div class="form-group">
 								<label for="startTime">開始時間</label> <input type="time"
-									class="form-control" id="startTime" name="startTime" >
+									class="form-control" id="startTime" name="startTime">
 							</div>
 							<div class="form-group">
 								<label for="endTime">終了時間</label> <input type="time"
-									class="form-control" id="endTime" name="endTime" >
+									class="form-control" id="endTime" name="endTime">
 							</div>
 							<div class="form-group">
 								<label for="location">場所(会議URL)</label> <input type="text"
-									class="form-control" id="location" name="location" >
+									class="form-control" id="location" name="location">
 							</div>
 							<div class="form-group">
 								<label for="jobTitle">職種</label> <input type="text"
-									class="form-control" id="jobTitle" name="jobTitle" >
+									class="form-control" id="jobTitle" name="jobTitle">
 							</div>
 							<div class="form-group">
 								<label for="selectionStatus">状況</label> <select
@@ -366,8 +372,7 @@
 							</div>
 							<div class="form-group">
 								<label for="motivation">志望動機</label>
-								<textarea class="form-control" id="motivation" name="motivation"
-									></textarea>
+								<textarea class="form-control" id="motivation" name="motivation"></textarea>
 							</div>
 
 							<button type="submit" class="btn btn-primary">追加</button>
@@ -398,26 +403,23 @@
 							<div class="form-group">
 								<label for="updateInterviewDate">日付</label> <input type="date"
 									class="form-control" id="updateInterviewDate"
-									name="interviewDate" >
+									name="interviewDate">
 							</div>
 							<div class="form-group">
 								<label for="updateStartTime">開始時間</label> <input type="time"
-									class="form-control" id="updateStartTime" name="startTime"
-									>
+									class="form-control" id="updateStartTime" name="startTime">
 							</div>
 							<div class="form-group">
 								<label for="updateEndTime">終了時間</label> <input type="time"
-									class="form-control" id="updateEndTime" name="endTime" >
+									class="form-control" id="updateEndTime" name="endTime">
 							</div>
 							<div class="form-group">
 								<label for="updateLocation">場所(会議URL)</label> <input type="text"
-									class="form-control" id="updateLocation" name="location"
-									>
+									class="form-control" id="updateLocation" name="location">
 							</div>
 							<div class="form-group">
 								<label for="updateJobTitle">職種</label> <input type="text"
-									class="form-control" id="updateJobTitle" name="jobTitle"
-									>
+									class="form-control" id="updateJobTitle" name="jobTitle">
 							</div>
 							<div class="form-group">
 								<label for="updateSelectionStatus">状況</label> <select
@@ -433,9 +435,9 @@
 							<div class="form-group">
 								<label for="updateMotivation">志望動機</label>
 								<textarea class="form-control" id="updateMotivation"
-									name="motivation" ></textarea>
+									name="motivation"></textarea>
 							</div>
-							
+
 							<button type="submit" class="btn btn-primary">更新</button>
 						</form>
 					</div>
