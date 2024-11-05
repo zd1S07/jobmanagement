@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>志望動機AI生成</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/styles.css">
+<!-- カスタムCSSへのリンク -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+	<th:block th:replace="common/header.html"></th:block>
+
+	<!-- メインコンテンツ -->
+	<div class="container mt-4">
+		<h2>志望動機AI生成</h2>
+
+		<!-- 志望動機生成用フォーム -->
+		<form id="motivationForm">
+			<div class="form-group">
+				<label for="companyWebsite">会社のウェブサイトURL:</label> <input type="text"
+					id="companyWebsite" name="companyWebsite" class="form-control"
+					required>
+			</div>
+
+			<div class="form-group">
+				<label for="jobTitle">職種:</label> <input type="text" id="jobTitle"
+					name="jobTitle" class="form-control" required>
+			</div>
+
+			<div class="form-group">
+				<label for="experienceStatus">経験状況:</label> <select
+					id="experienceStatus" name="experienceStatus" class="form-control"
+					required>
+					<option value="未経験">未経験</option>
+					<option value="経験1年未満">経験1年未満</option>
+					<option value="経験1年以上">経験1年以上</option>
+					<option value="スクール通学">スクールに通ったことがある</option>
+				</select>
+			</div>
+
+			<button type="submit" class="btn btn-primary">生成</button>
+		</form>
+
+		<!-- ローディングメッセージ -->
+		<div id="loadingMessage" class="mt-4" style="display: none;">
+			<p>
+				生成中... <img
+					src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWM1cWxlZGI3Y29yMjFuajJkNWk0ZGloeDFmbmU5NTI2Y25rNWZwMCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/uIJBFZoOaifHf52MER/giphy.gif"
+					alt="Loading" width="200">
+			</p>
+			<!-- ローディングアニメーション -->
+		</div>
+
+		<!-- 結果表示エリア -->
+		<div id="motivationResult" class="mt-4">
+			<h3>生成された志望動機:</h3>
+			<p id="motivationText"></p>
+			<button id="copyButton" class="btn btn-secondary mt-2"
+				style="display: none;">コピー</button>
+			<!-- コピーボタン -->
+			<div id="copyFeedback" class="mt-2"
+				style="display: none; color: green;">コピーしました!</div>
+			<!-- コピー成功メッセージ -->
+		</div>
+	</div>
+
+	<th:block th:replace="common/footer.html"></th:block>
+</body>
+</html>

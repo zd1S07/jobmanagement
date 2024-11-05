@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企業一覧</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+	<th:block th:replace="common/header.html"></th:block>
+
+	<div class="container">
+		<h1>面接企業一覧</h1>
+
+		<!-- 企業追加ボタン -->
+		<button type="button" class="btn btn-primary" data-toggle="modal"
+			data-target="#addCompanyModal">企業追加</button>
+
+		<div th:if="${message}" class="alert alert-success">
+			<p th:text="${message}"></p>
+		</div>
+
+		<!-- 企業一覧テーブル -->
+		<table class="table mt-3">
+			<thead>
+				<tr>
+
+					<th>企業名</th>
+					<th>担当者</th>
+					<th>メール(作成)</th>
+					<th>電話</th>
+					<th>HP</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- 企業情報を表示する行 -->
+				<tr th:each="company : ${companies}">
+
+					<td th:text="${company.name}"></td>
+					<td th:text="${company.contactPerson}"></td>
+					<td class="ellipsis" th:title="${company.email}"
+						th:text="${company.email}"
+						th:attr="data-company-name=${company.name}, data-contact-person=${company.contactPerson}, data-email=${company.email}"
+						onclick="showTemplateSelector(this.getAttribute('data-company-name'), this.getAttribute('data-contact-person'), this.getAttribute('data-email'))"
+						style="cursor: pointer; color: blue; text-decoration: underline;">
+					</td>
+
+					<td th:text="${company.phone}"></td>
+					<td class="ellipsis" th:title="${company.website}"><a
+						th:href="${company.website}" target="_blank"
+						th:text="${company.website}"
+						style="color: blue; text-decoration: underline;"></a></td>
+
+					<!-- 更新ボタン -->
+					<td class="button-group">
+						<button class="btn btn-warning" data-toggle="modal"
+							data-target="#updateCompanyModal" th:data-id="${company.id}"
+							th:data-name="${company.name}"
+							th:data-contact="${company.contactPerson}"
+							th:data-email="${company.email}" th:data-phone="${company.phone}"
+							th:data-website="${company.website}">更新</button> <!-- 削除ボタン -->
+						<button class="btn btn-danger" data-toggle="modal"
+							data-target="#deleteModal" th:data-id="${company.id}">
+							削除</button> <!-- 面接情報表示ボタン -->
+						<button class="btn btn-info" type="button" data-toggle="collapse"
+							th:attr="data-target='#interviewCollapse' + ${company.id}">
+							面接情報</button> <!-- 面接情報追加ボタン -->
+						<button type="button" class="btn btn-primary" data-toggle="modal"
+							data-target="#addInterviewModal"
+							th:data-company-id="${company.id}">面接追加</button>
+					</td>
+				</tr>
+
+				<!-- 面接情報を表示する行 -->
+				<tr
+					th:if="${companyInterviewsMap[company.id] != null && !companyInterviewsMap[company.id].isEmpty()}"
+					th:each="company : ${companies}">
+					<td colspan="7" class="collapse"
+						th:id="'interviewCollapse' + ${company.id}"><strong
+						th:text="'面接情報: ' + ${company.name}"></strong> <span
+						style="display: none;" th:text="${company.contactPerson}"></span>
+						<span class="companyWebsite" style="display: none;"
+						th:text="${company.website}"></span>
+						<table class="table mt-3">
+							<thead>
+								<tr>
+
+									<th>日付</th>
+									<th>開始時間</th>
+									<th>終了時間</th>
+									<th>場所(会議URL)</th>
+									<th>職種</th>
+									<th>状況</th>
+									<th>志望動機</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="interview : ${companyInterviewsMap[company.id]}">
+
+									<td th:text="${interview.interviewDate}"></td>
+									<td th:text="${interview.startTime}"></td>
+									<td th:text="${interview.endTime}"></td>
+
+									<td class="ellipsis"><span
+										th:if="${not interview.location.startsWith('http://') and not interview.location.startsWith('https://')}"
+										th:text="${interview.location}"
+										onclick="openGoogleMaps(this.textContent)"
+										style="color: blue; text-decoration: underline; cursor: pointer;">
+									</span> <a
+										th:if="${interview.location.startsWith('http://') or interview.location.startsWith('https://')}"
+										th:href="${interview.location}" target="_blank"
+										th:text="${interview.location}"> </a></td>
+
+									<td th:text="${interview.jobTitle}"></td>
+									<td th:text="${interview.selectionStatus}"></td>
+									<td class="motivation-cell" th:text="${interview.motivation}"
+										style="cursor: pointer;"
+										onclick="showMotivationModal(this.textContent)"></td>
+									<td class="button-group">
+										<button class="btn btn-warning" data-toggle="modal"
+											data-target="#updateInterviewModal"
+											th:data-id="${interview.id}"
+											th:data-date="${interview.interviewDate}"
+											th:data-start="${interview.startTime}"
+											th:data-end="${interview.endTime}"
+											th:data-location="${interview.location}"
+											th:data-job="${interview.jobTitle}"
+											th:data-status="${interview.selectionStatus}"
+											th:data-motivation="${interview.motivation}">更新</button>
+										<button class="btn btn-danger" data-toggle="modal"
+											data-target="#deleteInterviewModal"
+											th:data-id="${interview.id}">削除</button>
+										<button type="button" class="btn btn-primary"
+											onclick="addInterviewToCalendar(event)">Googleカレンダー</button>
+									</td>
+								</tr>
+							</tbody>
+						</table></td>
+				</tr>
+			</tbody>
+		</table>
+		
+
+
+
+
+
+
+
+
+
+
+		<!-- モーダルセクション -->
+		<!-- メールテンプレート選択モーダル -->
+		<div class="modal fade" id="templateSelector" tabindex="-1"
+			aria-labelledby="templateSelectorLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="templateSelectorLabel">メールテンプレート選択</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span>&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<button class="btn btn-primary" onclick="createEmail('書類送付')">書類送付</button>
+						<button class="btn btn-primary" onclick="createEmail('日程調整')">日程調整</button>
+						<button class="btn btn-primary" onclick="createEmail('御礼')">御礼</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 志望動機表示用モーダル -->
+		<div class="modal fade" id="motivationModal" tabindex="-1"
+			role="dialog" aria-labelledby="motivationModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="motivationModalLabel">志望動機</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p id="motivationText"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!-- 企業追加モーダル -->
+		<div class="modal fade" id="addCompanyModal" tabindex="-1"
+			role="dialog" aria-labelledby="addCompanyModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addCompanyModalLabel">企業追加</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form th:action="@{/company/add}" method="post">
+							<div class="form-group">
+								<label for="name">企業名</label> <input type="text"
+									class="form-control" id="name" name="name" required>
+							</div>
+							<div class="form-group">
+								<label for="contactPerson">担当者</label> <input type="text"
+									class="form-control" id="contactPerson" name="contactPerson"
+									>
+							</div>
+							<div class="form-group">
+								<label for="email">メール</label> <input type="email"
+									class="form-control" id="email" name="email" >
+							</div>
+							<div class="form-group">
+								<label for="phone">電話</label> <input type="tel"
+									class="form-control" id="phone" name="phone" >
+							</div>
+							<div class="form-group">
+								<label for="website">HP</label> <input type="url"
+									class="form-control" id="website" name="website" >
+							</div>
+							<button type="submit" class="btn btn-primary">追加</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 企業更新モーダル -->
+		<div class="modal fade" id="updateCompanyModal" tabindex="-1"
+			role="dialog" aria-labelledby="updateCompanyModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="updateCompanyModalLabel">企業更新</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form th:action="@{/company/update}" method="post">
+							<input type="hidden" id="updateCompanyId" name="id">
+							<div class="form-group">
+								<label for="updateName">企業名</label> <input type="text"
+									class="form-control" id="updateName" name="name" required>
+							</div>
+							<div class="form-group">
+								<label for="updateContactPerson">担当者</label> <input type="text"
+									class="form-control" id="updateContactPerson"
+									name="contactPerson" >
+							</div>
+							<div class="form-group">
+								<label for="updateEmail">メール</label> <input type="email"
+									class="form-control" id="updateEmail" name="email" >
+							</div>
+							<div class="form-group">
+								<label for="updatePhone">電話</label> <input type="tel"
+									class="form-control" id="updatePhone" name="phone" >
+							</div>
+							<div class="form-group">
+								<label for="updateWebsite">ウェブサイト</label> <input type="url"
+									class="form-control" id="updateWebsite" name="website" >
+							</div>
+							<button type="submit" class="btn btn-primary">更新</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 企業削除モーダル -->
+		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+			aria-labelledby="deleteModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="deleteModalLabel">企業削除</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p>この企業を削除しますか？</p>
+					</div>
+					<div class="modal-footer">
+						<form th:action="@{/company/delete}" method="post">
+							<input type="hidden" id="deleteCompanyId" name="id">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">キャンセル</button>
+							<button type="submit" class="btn btn-danger">削除</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 面接情報追加モーダル -->
+		<div class="modal fade" id="addInterviewModal" tabindex="-1"
+			role="dialog" aria-labelledby="addInterviewModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addInterviewModalLabel">面接情報追加</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+
+						<form id="addInterviewForm"
+							th:action="@{/company/{ID}/interview/add}" method="post">
+							<input type="hidden" id="addInterviewCompanyId" name="companyId">
+							<div class="form-group">
+								<label for="interviewDate">日付</label> <input type="date"
+									class="form-control" id="interviewDate" name="interviewDate"
+									>
+							</div>
+							<div class="form-group">
+								<label for="startTime">開始時間</label> <input type="time"
+									class="form-control" id="startTime" name="startTime" >
+							</div>
+							<div class="form-group">
+								<label for="endTime">終了時間</label> <input type="time"
+									class="form-control" id="endTime" name="endTime" >
+							</div>
+							<div class="form-group">
+								<label for="location">場所(会議URL)</label> <input type="text"
+									class="form-control" id="location" name="location" >
+							</div>
+							<div class="form-group">
+								<label for="jobTitle">職種</label> <input type="text"
+									class="form-control" id="jobTitle" name="jobTitle" >
+							</div>
+							<div class="form-group">
+								<label for="selectionStatus">状況</label> <select
+									class="form-control" id="selectionStatus"
+									name="selectionStatus" required>
+									<option value="書類選考">書類選考</option>
+									<option value="一次面接">一次面接</option>
+									<option value="二次面接">二次面接</option>
+									<option value="最終面接">最終面接</option>
+									<option value="内定">内定</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="motivation">志望動機</label>
+								<textarea class="form-control" id="motivation" name="motivation"
+									></textarea>
+							</div>
+
+							<button type="submit" class="btn btn-primary">追加</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 面接情報更新モーダル -->
+		<div class="modal fade" id="updateInterviewModal" tabindex="-1"
+			role="dialog" aria-labelledby="updateInterviewModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="updateInterviewModalLabel">面接情報更新</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form id="updateInterviewForm"
+							th:action="@{/company/{interviewId}/interview/update}"
+							method="post">
+							<input type="hidden" id="updateInterviewId" name="id">
+							<div class="form-group">
+								<label for="updateInterviewDate">日付</label> <input type="date"
+									class="form-control" id="updateInterviewDate"
+									name="interviewDate" >
+							</div>
+							<div class="form-group">
+								<label for="updateStartTime">開始時間</label> <input type="time"
+									class="form-control" id="updateStartTime" name="startTime"
+									>
+							</div>
+							<div class="form-group">
+								<label for="updateEndTime">終了時間</label> <input type="time"
+									class="form-control" id="updateEndTime" name="endTime" >
+							</div>
+							<div class="form-group">
+								<label for="updateLocation">場所(会議URL)</label> <input type="text"
+									class="form-control" id="updateLocation" name="location"
+									>
+							</div>
+							<div class="form-group">
+								<label for="updateJobTitle">職種</label> <input type="text"
+									class="form-control" id="updateJobTitle" name="jobTitle"
+									>
+							</div>
+							<div class="form-group">
+								<label for="updateSelectionStatus">状況</label> <select
+									class="form-control" id="updateSelectionStatus"
+									name="selectionStatus" required>
+									<option value="書類選考">書類選考</option>
+									<option value="一次面接">一次面接</option>
+									<option value="二次面接">二次面接</option>
+									<option value="最終面接">最終面接</option>
+									<option value="内定">内定</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="updateMotivation">志望動機</label>
+								<textarea class="form-control" id="updateMotivation"
+									name="motivation" ></textarea>
+							</div>
+							
+							<button type="submit" class="btn btn-primary">更新</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 面接情報削除モーダル -->
+		<div class="modal fade" id="deleteInterviewModal" tabindex="-1"
+			role="dialog" aria-labelledby="deleteInterviewModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="deleteInterviewModalLabel">面接情報削除</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p>この面接情報を本当に削除しますか？</p>
+					</div>
+					<div class="modal-footer">
+						<form id="deleteInterviewForm"
+							th:action="@{/company/interview/{interviewId}/delete}"
+							method="post">
+							<input type="hidden" id="deleteInterviewId" name="interviewId">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">キャンセル</button>
+							<button type="submit" class="btn btn-danger">削除</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<th:block th:replace="common/footer.html"></th:block>
+
+
+
+
+	</div>
+</body>
+</html>

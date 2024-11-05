@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ログイン</title>
+</head>
+<body>
+    <h1>ログイン</h1>
+    <form th:action="@{/account/login}" method="post">
+        <div>
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" name="username" required>
+        </div>
+        <div>
+            <label for="password">パスワード</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div th:if="${param.error}">
+            <p style="color: red;">ログインに失敗しました。もう一度お試しください。</p>
+        </div>
+
+        <div>
+            <button type="submit">ログイン</button>
+        </div>
+    </form>
+	<div th:if="${param.logout}" style="color:green;">ログアウトに成功しました。</div>
+
+
+    <div>
+        <p>アカウントは作成済みですか？<a th:href="@{/account/create}">アカウント作成はこちら</a></p>
+        <p><a th:href="@{/account/password/reset}">パスワードを忘れた場合はこちら</a></p> <!-- パスワードリセットリンク -->
+    </div>
+</body>
+</html>

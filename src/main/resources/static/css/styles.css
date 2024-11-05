@@ -1,0 +1,223 @@
+@charset "UTF-8";
+.right-align {
+    text-align: left;
+    margin-left: 40px;
+}
+
+.large-text {
+    font-size: 1.5em; /* 必要に応じてサイズを調整 */
+     margin-left: 40px;
+    /* 他のスタイルを追加することも可能 */
+}
+
+
+ 
+
+h1, h2, .table-title {
+    margin-left: 20px; /* 必要な分だけ余白を追加 */
+    text-align: left; /* テキストの配置を左寄せのままにする場合 */
+}
+
+body {
+    background-color: #f4f5f7; /* 明るいグレーの背景色 */
+    color: #333; /* テキストのメインカラー */
+    font-family: Arial, sans-serif;
+    margin: 0; /* デフォルトのマージンを削除 */
+    padding-bottom: 60px; /* フッター分のスペースを確保 */
+}
+
+.table, .table td, .table th {
+    border: 1px solid #dee2e6; /* 薄いグレーの境界線 */
+    border-collapse: collapse; /* 境界線が重ならないように設定 */
+}
+
+.table {
+    line-height: 1.2; /* 行の高さを小さくする */
+    font-size: 0.9em; /* テーブル内のフォントを少し小さくする */
+    max-width: 100%; /* テーブル幅を画面全体の90%に縮小 */
+    margin-left: 0;
+    table-layout: auto;
+}
+
+.table-warning {
+    background-color: #fff3cd; /* 任意の警告色 */
+}
+
+.ellipsis {
+    white-space: nowrap; /* テキストを折り返さない */
+    overflow: hidden; /* はみ出したテキストを隠す */
+    text-overflow: ellipsis; /* 省略記号を表示 */
+    max-width: 150px; /* 幅を制限 */
+}
+
+.motivation-cell {
+    max-width: 200px; /* 必要に応じて幅を調整 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* テキストが切れる際に「...」を表示 */
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px; /* 角を丸めて柔らかい印象に */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 軽い影 */
+}
+
+.navbar {
+    margin-bottom: 20px; /* ナビゲーションバーの下にスペースを追加 */
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem; /* ブランド名のフォントサイズ */
+}
+
+.nav-link {
+    padding: 15px 20px; /* リンクのパディング */
+}
+
+.nav-link:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* ホバー時の背景色 */
+    border-radius: 5px; /* ホバー時の角を丸める */
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2c3e50; /* ダークカラーで統一感 */
+    padding: 10px 0;
+    color: #ffffff;
+    text-align: center;
+    z-index: 1000; /* 他の要素に隠れないように設定 */
+}
+
+.footer-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.footer-nav .nav-link {
+    color: #d3d3d3;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-nav .nav-link:hover {
+    color: #ffffff;
+}
+
+.footer-nav .nav-item {
+    margin: 0;
+}
+
+.footer-copyright {
+    font-size: 12px;
+    color: #d3d3d3;
+    margin-top: 5px;
+}
+ .sidebar {
+    position: fixed;
+    top: 60px; /* ヘッダーの高さを考慮 */
+    left: 0;
+    width: 250px; /* サイドバーの幅 */
+    height: calc(100% - 60px); /* ヘッダーの高さを除いた全高 */
+    background-color: #ffffff; /* サイドバーの背景色 */
+    padding-top: 60px; /* 上部のパディングを減らす */
+    
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* より柔らかい影 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 開閉アニメーションと影の変更 */
+    transform: translateX(-100%); /* 初期状態で非表示 */
+    z-index: 1000; /* 他の要素より前面に表示 */
+    overflow-y: auto; /* 縦のオーバーフローを許可 */
+}
+ .sidebar h3{
+  padding-left:20px;
+ }
+
+.sidebar.open {
+    transform: translateX(0); /* サイドバーを表示 */
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3); /* サイドバー表示時の影を強くする */
+}
+
+.sidebar-toggle {
+    position: fixed;
+    top: 70px; /* ヘッダーの下に配置 */
+    left: 10px; /* 左上に配置 */
+    z-index: 1100; /* サイドバーより前面に表示 */
+    background-color: #007bff; /* ボタンの背景色 */
+    color: #ffffff; /* ボタンの文字色 */
+    border: none; /* ボタンの境界線を削除 */
+    border-radius: 5px; /* 角を丸める */
+    padding: 10px; /* パディングを追加 */
+    cursor: pointer; /* カーソルをポインタに */
+    transition: background-color 0.3s ease; /* ホバー時のアニメーション */
+}
+
+.sidebar-toggle:hover {
+    background-color: #0056b3; /* ホバー時の色 */
+}
+
+/* サイドバー内のリンクのスタイル */
+.sidebar a {
+    display: block; /* ブロック要素にして全幅を使う */
+    padding: 10px 15px; /* パディング */
+    color: #333; /* テキストの色 */
+    text-decoration: none; /* 下線を削除 */
+    transition: background-color 0.3s ease; /* ホバー時のアニメーション */
+}
+
+.sidebar a:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* ホバー時の背景色 */
+    border-radius: 5px; /* ホバー時の角を丸める */
+}
+
+/* モーダル内のtextareaの初期設定 */
+.modal-body textarea {
+    height: 80px; /* 初期の高さ */
+    transition: height 0.2s; /* 高さの変更にアニメーションを追加 */
+}
+
+/* フォーカス時に高さを変更 */
+.modal-body textarea:focus {
+    height: 200px; /* フォーカス時の高さ */
+    /* さらに大きくしたい場合は数値を調整 */
+}
+
+/* 通常の横並びレイアウト */
+.button-group {
+    display: flex;
+    gap: 8px; /* ボタン間の間隔 */
+}
+
+/* ボタンのスタイル */
+.button-group .btn {
+    flex: 1; /* ボタンが均等に幅を取る */
+    padding: 10px 15px;
+    font-size: 0.9rem;
+}
+
+/* 狭い画面用（例：600px以下） */
+@media (max-width: 600px) {
+    .button-group {
+        flex-wrap: wrap; /* 複数行に折り返し */
+        gap: 4px;
+    }
+
+    /* ボタンを正方形のように配置 */
+    .button-group .btn {
+        width: 48%; /* 2列になるよう幅を設定 */
+        padding: 10px; /* ボタンサイズを調整 */
+        font-size: 0.8rem; /* 小さめのフォント */
+    }
+}

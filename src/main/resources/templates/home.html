@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ホーム</title>
+
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	<!-- ヘッダー部分（ナビゲーションバー） -->
+	<header>
+		<nav class="navbar navbar-expand navbar-light bg-light">
+			<a class="navbar-brand">面接企業管理システム</a>
+			<div class="navbar-collapse">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/company/list}">面接企業情報</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/motivation}">志望動機AI作成</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/logout}">ログアウト</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<!-- コンテンツ部分 -->
+	<div class="container mt-4">
+		<h2>今日の日付</h2>
+		<p class="large-text"
+			th:text="'今日は ' + ${today} + ' ' + ${dayOfWeek} + ' です。'"></p>
+
+		<h5 class="right-align">表示日数の設定</h5>
+		<form action="#" method="get" class="right-align">
+			<label for="notificationDays">何日前までの面接を表示しますか？</label> <select
+				name="daysUntilNotification" id="notificationDays">
+				<option th:each="dayOption : ${notificationDaysOptions}"
+					th:value="${dayOption}" th:text="${dayOption} + '日'"
+					th:selected="${dayOption == daysUntilNotification}"></option>
+			</select>
+			<button type="submit" class="btn btn-primary">更新</button>
+		</form>
+
+		<!-- 間近になっている面接リスト -->
+		<h2>間近になっている面接</h2>
+		<div
+			th:if="${upcomingInterviews != null and !#lists.isEmpty(upcomingInterviews)}">
+			<ul>
+				<li th:each="interview : ${upcomingInterviews}"><span
+					th:text="${interview.interviewDate} + ' ' + ${interview.startTime}"></span>
+					<span> - </span> <span th:text="${interview.company.name}"></span>
+					<span> - </span> <span> <a
+						th:if="${#strings.startsWith(interview.location, 'http')}"
+						th:href="${interview.location}" target="_blank" th:text="'会議URL'"></a>
+						<span th:if="${!#strings.startsWith(interview.location, 'http')}">
+							<a
+							th:href="'https://www.google.com/maps/search/?api=1&query=' + ${interview.location}"
+							target="_blank" th:text="${interview.location}"></a>
+					</span>
+				</span></li>
+			</ul>
+		</div>
+		<div
+			th:if="${upcomingInterviews == null or #lists.isEmpty(upcomingInterviews)}">
+			<p>間近になっている面接はありません。</p>
+		</div>
+	</div>
+
+
+
+	<div class="container mt-4">
+		<h2>お気に入りの求人</h2>
+		<!-- 求人登録ボタン -->
+		<button class="btn btn-primary mb-3" data-toggle="modal"
+			data-target="#addJobModal">お気に入り求人を追加</button>
+
+		<!-- 求人登録モーダル -->
+		<div class="modal fade" id="addJobModal" tabindex="-1" role="dialog"
+			aria-labelledby="addJobModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addJobModalLabel">お気に入り求人を追加</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form id="addJobForm" th:action="@{/favoriteJob/add}"
+							method="post">
+							<div class="form-group">
+								<label for="companyName">会社名</label> <input type="text"
+									class="form-control" id="companyName" name="companyName"
+									required>
+							</div>
+							<div class="form-group">
+								<label for="jobLink">求人リンク</label> <input type="url"
+									class="form-control" id="jobLink" name="jobLink" required>
+							</div>
+							<div class="form-group">
+								<label for="deadline">締切日</label> <input type="date"
+									class="form-control" id="deadline" name="deadline">
+							</div>
+							<button type="submit" class="btn btn-primary">追加</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 削除完了メッセージの表示 -->
+		<div th:if="${message}" style="color: green;">
+			<p th:text="${message}"></p>
+		</div>
+
+		<!-- 既に登録済みのメッセージ表示 -->
+		<div th:if="${errorMessage}" class="alert alert-danger">
+			<p th:text="${errorMessage}"></p>
+		</div>
+
+		<!-- 削除確認モーダル -->
+		<div id="confirm-delete-modal" style="display: none;">
+			<p>この求人を削除してよろしいですか？</p>
+			<a id="delete-yes" class="btn btn-danger">はい</a>
+			<button class="btn btn-secondary" onclick="closeModal()">キャンセル</button>
+		</div>
+
+
+		<!-- 面接企業に追加確認用モーダル -->
+		<div id="confirm-add-modal" style="display: none;">
+			<p id="add-company-name">この会社を面接企業情報に追加してよろしいですか？</p>
+			<a id="add-yes" class="btn btn-primary">はい</a>
+			<button class="btn btn-secondary" onclick="closeAddModal()">キャンセル</button>
+		</div>
+
+
+		<!-- お気に入り求人の一覧テーブル -->
+		<div th:if="${favoriteJobs != null && !favoriteJobs.isEmpty()}">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>会社名</th>
+						<th>求人リンク</th>
+						<th>締切日</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="job : ${favoriteJobs}"
+						th:classappend="${job.deadline != null && (job.deadline.isBefore(T(java.time.LocalDate).now().plusDays(7)) || job.deadline.isEqual(T(java.time.LocalDate).now())) ? 'table-warning' : ''}">
+						<td th:text="${job.companyName}"></td>
+						<td class="ellipsis"><a th:href="${job.jobLink}"
+							target="_blank" th:text="${job.jobLink}">リンク</a></td>
+						<td th:text="${job.deadline}"></td>
+						<td class="button-group">
+							<!-- 求人を削除するボタン -->
+							<button class="btn btn-danger delete-btn" data-job-id="${job.id}"
+								th:data-href="@{/favoriteJob/delete/{jobId}(jobId=${job.id})}">削除</button>
+
+							<!-- 面接企業に追加するボタン -->
+							<button class="btn btn-primary add-interview-btn"
+								th:data-company-name="${job.companyName}"
+								th:data-href="@{/interviewCompany/add(companyName=${job.companyName})}">面接企業に追加</button>
+
+							<button class="btn btn-info"
+								th:data-company-name="${job.companyName}"
+								onclick="window.open('https://www.google.com/search?q=' + this.dataset.companyName + ' 口コミ', '_blank')">口コミ</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+		</div>
+		<p th:if="${favoriteJobs == null || favoriteJobs.isEmpty()}">お気に入りの求人がまだ登録されていません。</p>
+	</div>
+
+
+
+
+
+	<th:block th:insert="~{common/footer.html}"></th:block>
+
+</body>
+</html>
