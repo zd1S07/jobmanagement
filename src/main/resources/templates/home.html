@@ -28,69 +28,93 @@
 
 	<!-- コンテンツ部分 -->
 	<div class="container mt-4">
-		<h2>今日の日付</h2>
-		
-		
-		<p class="large-text"
-			th:text="'今日は ' + ${today} + ' ' + ${dayOfWeek} + ' です。'"></p>
+		<div class="row">
+			<!-- 左側: 今日の日付と面接通知設定 -->
+			<div class="col-md-8">
+				<h2>今日の日付</h2>
+				<p class="large-text"
+					th:text="'今日は ' + ${today} + ' ' + ${dayOfWeek} + ' です。'"></p>
+
+				<!-- 間近になっている面接リスト -->
+				<h2>間近になっている面接</h2>
+				<h5 class="right-align">表示日数の設定 (デフォルトの設定: 3日)</h5>
+				<form action="#" method="get" class="right-align">
+					<label for="notificationDays">何日前までの面接を表示しますか？</label> <select
+						name="daysUntilNotification" id="notificationDays">
+						<option th:each="dayOption : ${notificationDaysOptions}"
+							th:value="${dayOption}" th:text="${dayOption} + '日'"
+							th:selected="${dayOption == daysUntilNotification}"></option>
+					</select>
+					<button type="submit" class="btn btn-primary">更新</button>
+				</form>
+
+				<br>
+
+				<!-- 面接リストの表示 -->
+				<div
+					th:if="${upcomingInterviews != null and !#lists.isEmpty(upcomingInterviews)}">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>日付</th>
+								<th>企業名</th>
+								<th>開始時間</th>
+								<th>終了時間</th>
+								<th>場所/会議URL</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="interview : ${upcomingInterviews}">
+								<td th:text="${interview.interviewDate}"></td>
+								<td th:text="${interview.company.name}"></td>
+								<td th:text="${interview.startTime}"></td>
+								<td th:text="${interview.endTime}"></td>
+
+								<!-- 会議URLか場所情報を適切に表示 -->
+								<td><span
+									th:if="${#strings.startsWith(interview.location, 'http')}">
+										<a th:href="${interview.location}" target="_blank"
+										th:text="'会議URL'"></a>
+								</span> <span
+									th:if="${!#strings.startsWith(interview.location, 'http')}">
+										<a
+										th:href="'https://www.google.com/maps/search/?api=1&query=' + ${interview.location}"
+										target="_blank" th:text="${interview.location}"></a>
+								</span></td>
 
 
-		<!-- 間近になっている面接リスト -->
-		<h2>間近になっている面接</h2>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 
-		<h5 class="right-align">表示日数の設定(デフォルトの設定:3日)</h5>
-		<form action="#" method="get" class="right-align">
-			<label for="notificationDays">何日前までの面接を表示しますか？</label> <select
-				name="daysUntilNotification" id="notificationDays">
-				<option th:each="dayOption : ${notificationDaysOptions}"
-					th:value="${dayOption}" th:text="${dayOption} + '日'"
-					th:selected="${dayOption == daysUntilNotification}"></option>
-			</select>
-			<button type="submit" class="btn btn-primary">更新</button>
-		</form>
-		<br>
+				<!-- 面接リストがない場合 -->
+				<div
+					th:if="${upcomingInterviews == null or #lists.isEmpty(upcomingInterviews)}">
+					<p>間近になっている面接はありません。</p>
+				</div>
+			</div>
 
-		<div
-			th:if="${upcomingInterviews != null and !#lists.isEmpty(upcomingInterviews)}">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>日付</th>
-						<th>企業名</th>
-						<th>開始時間</th>
-						<th>終了時間</th>
-						<th>場所(会議URL)</th>
-						<th>職種</th>
-						<th>状況</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="interview : ${upcomingInterviews}">
-						<td th:text="${interview.interviewDate}"></td>
-						<td th:text="${interview.company.name}"></td>
-						<td th:text="${interview.startTime}"></td>
-						<td th:text="${interview.endTime}"></td>
+			<!-- 右側: TODOリスト -->
+			<div class="col-md-4">
+				<h2>TODOリスト</h2>
+				<div class="todo-container">
+					<form id="todoForm" class="form-inline">
+						<input type="text" id="todoText" class="form-control"
+							placeholder="やることを入力" required> <input
+							type="datetime-local" id="todoDeadline" class="form-control"
+							required>
+						<button type="submit" class="btn btn-primary">追加</button>
+					</form>
 
-						<td><a
-							th:if="${#strings.startsWith(interview.location, 'http')}"
-							th:href="${interview.location}" target="_blank" th:text="'会議URL'"></a>
-							<span th:if="${!#strings.startsWith(interview.location, 'http')}">
-								<a
-								th:href="'https://www.google.com/maps/search/?api=1&query=' + ${interview.location}"
-								target="_blank" th:text="${interview.location}"></a>
-						</span></td>
-						<td th:text="${interview.jobTitle}"></td>
-						<td th:text="${interview.selectionStatus}"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div
-			th:if="${upcomingInterviews == null or #lists.isEmpty(upcomingInterviews)}">
-			<p>間近になっている面接はありません。</p>
+					<ul id="todoList" class="list-group mt-3">
+						<!-- TODOリスト項目はここに追加される -->
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
-
 
 
 
@@ -135,22 +159,23 @@
 			</div>
 		</div>
 
-		
+
 		<h5 class="right-align">
 			※締切日が１週間前の情報は<span class='table-warning'>背景色がこの色に変わります</span>
 		</h5>
 		<h5 class="right-align">
 			※締切日を過ぎている情報は<span class='table-secondary'>背景色がこの色に変わります</span>
 		</h5>
-		
+
 		<form class="right-align" action="/home" method="get">
 			<label for="sort">並び替え:</label> <select name="sort" id="sort">
 				<option value="added">追加した順</option>
 				<option value="deadline">締切が近い順</option>
 			</select>
-			<button type="submit">送信</button><p>(デフォルトは締切が近い順)</p>
+			<button type="submit">送信</button>
+			<p>(デフォルトは締切が近い順)</p>
 		</form>
-		
+
 		<!-- 削除完了メッセージの表示 -->
 		<div th:if="${message}" style="color: green;">
 			<p th:text="${message}"></p>
@@ -162,49 +187,51 @@
 		</div>
 
 		<!-- 削除確認モーダル -->
-<div class="modal fade" id="confirm-delete-modal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">削除確認</h5>
-                
-            </div>
-            <div class="modal-body">
-                <p>この求人を削除してよろしいですか？</p>
-            </div>
-            <div class="modal-footer">
-                <a id="delete-yes" class="btn btn-danger">はい</a>
-                <button type="button" class="btn btn-secondary"
-								data-dismiss="modal">キャンセル</button>
-            </div>
-        </div>
-    </div>
-</div>
+		<div class="modal fade" id="confirm-delete-modal" tabindex="-1"
+			aria-labelledby="deleteModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="deleteModalLabel">削除確認</h5>
 
-<!-- 面接企業に追加確認用モーダル -->
-<div class="modal fade" id="confirm-add-modal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">追加確認</h5>
-                
-            </div>
-            <div class="modal-body">
-                <p id="add-company-name">この会社を面接企業情報に追加してよろしいですか？</p>
-            </div>
-            <div class="modal-footer">
-                <a id="add-yes" class="btn btn-primary">はい</a>
-                <button type="button" class="btn btn-secondary"
-								data-dismiss="modal">キャンセル</button>
-            </div>
-        </div>
-    </div>
-</div>
+					</div>
+					<div class="modal-body">
+						<p>この求人を削除してよろしいですか？</p>
+					</div>
+					<div class="modal-footer">
+						<a id="delete-yes" class="btn btn-danger">はい</a>
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">キャンセル</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 面接企業に追加確認用モーダル -->
+		<div class="modal fade" id="confirm-add-modal" tabindex="-1"
+			aria-labelledby="addModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addModalLabel">追加確認</h5>
+
+					</div>
+					<div class="modal-body">
+						<p id="add-company-name">この会社を面接企業情報に追加してよろしいですか？</p>
+					</div>
+					<div class="modal-footer">
+						<a id="add-yes" class="btn btn-primary">はい</a>
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">キャンセル</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 
-		
-		
-		
+
+
+
 		<!-- お気に入り求人の一覧テーブル -->
 		<div th:if="${favoriteJobs != null && !favoriteJobs.isEmpty()}">
 			<table class="table">
