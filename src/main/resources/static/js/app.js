@@ -218,6 +218,10 @@ function addInterviewToCalendar(event) {
 	// 新しいタブでGoogleカレンダーイベント追加URLを開く
 	window.open(calendarUrl, "_blank");
 }
+function openGoogleMaps(location) {
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+    window.open(url, '_blank');
+}
 
 function showMotivationModal(motivation) {
 	$('#motivationText').text(motivation); // モーダルに志望動機をセット

@@ -45,8 +45,8 @@
 				<!-- 企業情報を表示する行 -->
 				<tr th:each="company : ${companies}">
 
-					<td th:text="${company.name}"></td>
-					<td th:text="${company.contactPerson}"></td>
+					<td class="ellipsis" th:text="${company.name}"th:title="${company.name}"></td>
+					<td class="ellipsis" th:text="${company.contactPerson}"th:title="${company.contactPerson}"></td>
 					<td class="ellipsis" th:title="${company.email}"
 						th:text="${company.email}"
 						th:attr="data-company-name=${company.name}, data-contact-person=${company.contactPerson}, data-email=${company.email}"
