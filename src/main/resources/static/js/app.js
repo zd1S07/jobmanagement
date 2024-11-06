@@ -85,6 +85,39 @@ $('#addInterviewModal').on('show.bs.modal', function(event) {
 	form.attr('action', actionUrl);
 });
 
+
+
+ // 開始時間または所要時間が変更された際に終了時間を再計算する関数
+function calculateEndTime() {
+    const startTime = document.getElementById("startTime").value;
+    const duration = parseInt(document.getElementById("duration").value, 10);
+
+    if (startTime && !isNaN(duration)) {
+        let [startHours, startMinutes] = startTime.split(':').map(Number);
+
+        // 所要時間を追加
+        startMinutes += duration;
+        startHours += Math.floor(startMinutes / 60);
+        startMinutes %= 60;
+
+        // 終了時間を設定
+        const endTime = document.getElementById("endTime");
+        endTime.value = `${String(startHours).padStart(2, '0')}:${String(startMinutes).padStart(2, '0')}`;
+    }
+}
+
+// ページロード時にデフォルトで1時間後の終了時間を設定する
+window.onload = function() {
+    // 所要時間を1時間に設定
+    document.getElementById("duration").value = "60";
+    
+    // 開始時間がすでに入力されていれば、終了時間も再計算
+    if (document.getElementById("startTime").value) {
+        calculateEndTime();
+    }
+};
+
+
 // 面接情報更新モーダルにデータを設定
 $('#updateInterviewModal').on('show.bs.modal', function(event) {
 	var button = $(event.relatedTarget);
@@ -112,6 +145,39 @@ $('#updateInterviewModal').on('show.bs.modal', function(event) {
 	var actionUrl = form.attr('action').replace('{interviewId}', id);
 	form.attr('action', actionUrl);
 });
+
+// 更新用モーダルの終了時間を計算する関数
+function calculateUpdateEndTime() {
+    const startTime = document.getElementById("updateStartTime").value;
+    const duration = parseInt(document.getElementById("updateDuration").value, 10);
+
+    if (startTime && !isNaN(duration)) {
+        let [startHours, startMinutes] = startTime.split(':').map(Number);
+
+        // 所要時間を追加
+        startMinutes += duration;
+        startHours += Math.floor(startMinutes / 60);
+        startMinutes %= 60;
+
+        // 終了時間を設定
+        const endTime = document.getElementById("updateEndTime");
+        endTime.value = `${String(startHours).padStart(2, '0')}:${String(startMinutes).padStart(2, '0')}`;
+    }
+}
+
+// モーダルが表示される際にデフォルトで1時間後の終了時間を設定する
+window.onload = function() {
+    // 所要時間を1時間に設定
+    document.getElementById("updateDuration").value = "60";
+    
+    // 開始時間がすでに入力されていれば、終了時間も再計算
+    if (document.getElementById("updateStartTime").value) {
+        calculateUpdateEndTime();
+    }
+};
+
+
+
 
 // 面接情報削除モーダルにデータを設定
 $('#deleteInterviewModal').on('show.bs.modal', function(event) {
@@ -147,13 +213,13 @@ function createEmail(templateType) {
 
 	if (templateType === '書類送付') {
 		subject = "書類送付のお知らせ";
-		body = `${window.selectedCompanyName} ${contactPerson}様\nお世話になっております。\n\n以下の書類を送付いたしますので、ご確認ください。\n\n- [書類名1]\n- [書類名2]\n\nご不明な点がございましたら、お気軽にお知らせください。\n\n何卒よろしくお願いいたします。\n\nユーザー名`;
+		body = `${window.selectedCompanyName} ${contactPerson}様\nお世話になっております。\n\n以下の書類を送付いたしますので、ご確認ください。\n\n- [履歴書]\n- [職務経歴書]\n\nご不明な点がございましたら、お気軽にお知らせください。\n\n何卒よろしくお願いいたします。\n\n坂口  拓`;
 	} else if (templateType === '日程調整') {
 		subject = "日程調整のお願い";
-		body = `${window.selectedCompanyName} ${contactPerson}様\nお世話になっております。\n\n面談の日程について、以下の候補をご提案いたします。\n\n- [候補日1]\n- [候補日2]\n- [候補日3]\n\nご都合はいかがでしょうか？お手数ですが、確認いただければ幸いです。\n\n何卒よろしくお願いいたします。\n\nユーザー名`;
+		body = `${window.selectedCompanyName} ${contactPerson}様\nお世話になっております。\n\n面談の日程について、以下の候補をご提案いたします。\n\n- [候補日1]\n- [候補日2]\n- [候補日3]\n\nご都合はいかがでしょうか？お手数ですが、確認いただければ幸いです。\n\n何卒よろしくお願いいたします。\n\n坂口  拓`;
 	} else if (templateType === '御礼') {
 		subject = "御礼のメール";
-		body = `${window.selectedCompanyName} ${contactPerson}様\nお世話になっております。\n\n先日はお忙しい中お時間をいただき、誠にありがとうございました。\nおかげさまで大変有意義な時間を過ごすことができました。\n\n引き続きよろしくお願いいたします。\n\n何かご不明な点があれば、いつでもお知らせください。\n\nユーザー名`;
+		body = `${window.selectedCompanyName} ${contactPerson}様\nお世話になっております。\n\n先日はお忙しい中お時間をいただき、誠にありがとうございました。\nおかげさまで大変有意義な時間を過ごすことができました。\n\n引き続きよろしくお願いいたします。\n\n何かご不明な点があれば、いつでもお知らせください。\n\n坂口  拓`;
 	}
 
 	const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${window.selectedEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;

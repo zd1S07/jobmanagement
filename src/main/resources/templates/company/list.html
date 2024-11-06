@@ -45,8 +45,10 @@
 				<!-- 企業情報を表示する行 -->
 				<tr th:each="company : ${companies}">
 
-					<td class="ellipsis" th:text="${company.name}"th:title="${company.name}"></td>
-					<td class="ellipsis" th:text="${company.contactPerson}"th:title="${company.contactPerson}"></td>
+					<td class="ellipsis" th:text="${company.name}"
+						th:title="${company.name}"></td>
+					<td class="ellipsis" th:text="${company.contactPerson}"
+						th:title="${company.contactPerson}"></td>
 					<td class="ellipsis" th:title="${company.email}"
 						th:text="${company.email}"
 						th:attr="data-company-name=${company.name}, data-contact-person=${company.contactPerson}, data-email=${company.email}"
@@ -70,9 +72,10 @@
 							th:data-website="${company.website}">更新</button> <!-- 削除ボタン -->
 						<button class="btn btn-danger" data-toggle="modal"
 							data-target="#deleteModal" th:data-id="${company.id}">
-							削除</button> <!-- 面接情報表示ボタン -->
+							削除</button>
 						<button class="btn btn-info" type="button" data-toggle="collapse"
-							th:attr="data-target='#interviewCollapse' + ${company.id}">
+							th:attr="data-target='#interviewCollapse' + ${company.id}"
+							th:if="${companyInterviewsMap[company.id] != null && !companyInterviewsMap[company.id].isEmpty()}">
 							面接<br>情報
 						</button> <!-- 面接情報追加ボタン -->
 						<button type="button" class="btn btn-primary" data-toggle="modal"
@@ -144,7 +147,9 @@
 											data-target="#deleteInterviewModal"
 											th:data-id="${interview.id}">削除</button>
 										<button type="button" class="btn btn-primary"
-											onclick="addInterviewToCalendar(event)">Google<br>カレンダー</button>
+											onclick="addInterviewToCalendar(event)">
+											Google<br>カレンダー
+										</button>
 									</td>
 								</tr>
 							</tbody>
@@ -153,8 +158,7 @@
 			</tbody>
 		</table>
 
-		<br>
-		<br>
+		<br> <br>
 
 
 
@@ -322,6 +326,7 @@
 		</div>
 
 		<!-- 面接情報追加モーダル -->
+		<!-- 面接情報追加モーダル -->
 		<div class="modal fade" id="addInterviewModal" tabindex="-1"
 			role="dialog" aria-labelledby="addInterviewModalLabel"
 			aria-hidden="true">
@@ -335,7 +340,6 @@
 						</button>
 					</div>
 					<div class="modal-body">
-
 						<form id="addInterviewForm"
 							th:action="@{/company/{ID}/interview/add}" method="post">
 							<input type="hidden" id="addInterviewCompanyId" name="companyId">
@@ -345,12 +349,30 @@
 							</div>
 							<div class="form-group">
 								<label for="startTime">開始時間</label> <input type="time"
-									class="form-control" id="startTime" name="startTime">
+									class="form-control" id="startTime" name="startTime"
+									onchange="calculateEndTime()">
 							</div>
+
+							<div class="form-group">
+								<label for="duration">所要時間 (分)</label> <select
+									class="form-control" id="duration" name="duration"
+									onchange="calculateEndTime()">
+									<option value="15">15分</option>
+									<option value="30">30分</option>
+									<option value="45">45分</option>
+									<option value="60" selected>1時間</option>
+									<option value="75">1時間15分</option>
+									<option value="90">1時間30分</option>
+									<option value="105">1時間45分</option>
+									<option value="120">2時間</option>
+								</select>
+							</div>
+
 							<div class="form-group">
 								<label for="endTime">終了時間</label> <input type="time"
-									class="form-control" id="endTime" name="endTime">
+									class="form-control" id="endTime" name="endTime" readonly>
 							</div>
+
 							<div class="form-group">
 								<label for="location">場所(会議URL)</label> <input type="text"
 									class="form-control" id="location" name="location">
@@ -374,13 +396,15 @@
 								<label for="motivation">志望動機</label>
 								<textarea class="form-control" id="motivation" name="motivation"></textarea>
 							</div>
-
 							<button type="submit" class="btn btn-primary">追加</button>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
+
+
+
 
 		<!-- 面接情報更新モーダル -->
 		<div class="modal fade" id="updateInterviewModal" tabindex="-1"
@@ -407,11 +431,28 @@
 							</div>
 							<div class="form-group">
 								<label for="updateStartTime">開始時間</label> <input type="time"
-									class="form-control" id="updateStartTime" name="startTime">
+									class="form-control" id="updateStartTime" name="startTime"
+									onchange="calculateUpdateEndTime()">
 							</div>
+
+							<div class="form-group">
+								<label for="duration">所要時間 (分)</label> <select
+									class="form-control" id="updateDuration" name="duration"
+									onchange="calculateUpdateEndTime()">
+									<option value="15">15分</option>
+									<option value="30">30分</option>
+									<option value="45">45分</option>
+									<option value="60" selected>1時間</option>
+									<option value="75">1時間15分</option>
+									<option value="90">1時間30分</option>
+									<option value="105">1時間45分</option>
+									<option value="120">2時間</option>
+								</select>
+							</div>
+
 							<div class="form-group">
 								<label for="updateEndTime">終了時間</label> <input type="time"
-									class="form-control" id="updateEndTime" name="endTime">
+									class="form-control" id="updateEndTime" name="endTime" readonly>
 							</div>
 							<div class="form-group">
 								<label for="updateLocation">場所(会議URL)</label> <input type="text"
