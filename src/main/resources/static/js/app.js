@@ -50,9 +50,24 @@ $('#addInterviewModal').on('show.bs.modal', function(event) {
 	form.attr('action', actionUrl);
 });
 
+// 開始時間または所要時間が変更された際に終了時間を再計算する関数
+function calculateEndTime() {
+    const startTime = document.getElementById("startTime").value;
+    const duration = parseInt(document.getElementById("duration").value, 10);
 
+    if (startTime && !isNaN(duration)) {
+        let [startHours, startMinutes] = startTime.split(':').map(Number);
 
+        // 所要時間を追加
+        startMinutes += duration;
+        startHours += Math.floor(startMinutes / 60);
+        startMinutes %= 60;
 
+        // 終了時間を設定
+        const endTime = document.getElementById("endTime");
+        endTime.value = `${String(startHours).padStart(2, '0')}:${String(startMinutes).padStart(2, '0')}`;
+    }
+}
 
 // ページロード時にデフォルトで1時間後の終了時間を設定する
 window.onload = function() {
@@ -95,6 +110,7 @@ $('#updateInterviewModal').on('show.bs.modal', function(event) {
 });
 
 
+// 更新用モーダルの終了時間を計算する関数
 function calculateUpdateEndTime() {
     const startTime = document.getElementById("updateStartTime").value;
     const duration = parseInt(document.getElementById("updateDuration").value, 10);
