@@ -18,6 +18,11 @@
         <div th:if="${param.error}">
             <p style="color: red;">ログインに失敗しました。もう一度お試しください。</p>
         </div>
+        
+        <!-- パスワードリセット成功メッセージ -->
+    <div th:if="${param.resetSuccess}">
+        <p style="color: green;">パスワードがリセットされました。ログインしてください。</p>
+    </div>
 
         <div>
             <button type="submit">ログイン</button>
