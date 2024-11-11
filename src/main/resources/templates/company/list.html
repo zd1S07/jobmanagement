@@ -18,12 +18,9 @@
 		<button type="button" class="btn btn-primary" data-toggle="modal"
 			data-target="#addCompanyModal">企業追加</button>
 
-		<h5>
-			※面接情報が追加されている場合には操作の<span class='btn btn-info'>面接情報</span>を押すと下部に表示されます<br>非表示にしたい場合はもう一度押してください。
-		</h5>
-		<h5>
-			※企業を追加する際にメールアドレスを入力し登録している状態でメール部分をクリックすると<br>現在ログインしているGoogleのアカウントで簡単にGmailを作成できます。
-		</h5>
+
+
+
 		<div th:if="${message}" class="alert alert-success">
 			<p th:text="${message}"></p>
 		</div>
@@ -157,6 +154,29 @@
 				</tr>
 			</tbody>
 		</table>
+		<br> <br>
+		</div>
+		
+		
+		<div class="container">
+  <div class="container">
+  
+  
+  <!-- 埋め込むiframe -->
+  <iframe id="calendarIframe" frameborder="0" scrolling="no" style="display: none;"></iframe>
+ <br>
+ 
+   <!-- URL入力フォーム -->
+    <form id="embedForm">
+        <label for="calendarEmbedCode">Googleカレンダーの埋め込みコードを貼り付けてください<br>（例：&lt;iframe src="...">&lt;/iframe>の形式）</label>
+        <input type="text" id="calendarEmbedCode" name="calendarEmbedCode" required style="width: 100%; padding: 8px;">
+        <button type="button" onclick="embedCalendar()">カレンダーを埋め込む</button>
+    </form>
+
+  
+</div>
+
+
 
 		<br> <br>
 
@@ -325,7 +345,7 @@
 			</div>
 		</div>
 
-		
+
 		<!-- 面接情報追加モーダル -->
 		<div class="modal fade" id="addInterviewModal" tabindex="-1"
 			role="dialog" aria-labelledby="addInterviewModalLabel"

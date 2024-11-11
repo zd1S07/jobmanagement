@@ -1,4 +1,49 @@
+ window.onload = function() {
+    // ローカルストレージからURLを取得して表示
+    const storedUrl = localStorage.getItem("calendarUrl");
+    console.log("Stored URL:", storedUrl); // ログ出力して確認
+    if (storedUrl) {
+        displayCalendar(storedUrl);
+    } else {
+        console.log("No stored URL found");
+    }
 
+    // デフォルトで1時間後の終了時間を設定
+    document.getElementById("duration").value = "60";
+    
+    if (document.getElementById("startTime").value) {
+        calculateEndTime();
+    }
+};
+
+// カレンダーの埋め込みコードからURLを抽出して表示
+function embedCalendar() {
+    const embedCode = document.getElementById("calendarEmbedCode").value;
+
+    // `<iframe src="` と `"></iframe>`を取り除いてURL部分だけを抽出
+    const urlMatch = embedCode.match(/<iframe src="([^"]+)"/);
+    const url = urlMatch ? urlMatch[1] : null;
+
+    if (url) {
+        // ローカルストレージに保存
+        localStorage.setItem("calendarUrl", url);
+        console.log("Saving URL:", url); // ログ出力して保存内容確認
+
+        // カレンダー表示
+        displayCalendar(url);
+    } else {
+        alert("無効な埋め込みコードです。正しいURLを入力してください。");
+    }
+}
+
+// カレンダーを表示する
+function displayCalendar(url) {
+    const iframe = document.getElementById("calendarIframe");
+
+    // iframeのsrc属性にURLをセット
+    iframe.src = url;
+    iframe.style.display = "block";  // iframeを表示
+}
 
 
 
@@ -69,46 +114,33 @@ function calculateEndTime() {
     }
 }
 
-// ページロード時にデフォルトで1時間後の終了時間を設定する
-window.onload = function() {
-    // 所要時間を1時間に設定
-    document.getElementById("duration").value = "60";
-    
-    // 開始時間がすでに入力されていれば、終了時間も再計算
-    if (document.getElementById("startTime").value) {
-        calculateEndTime();
-    }
-};
-
-
 // 面接情報更新モーダルにデータを設定
 $('#updateInterviewModal').on('show.bs.modal', function(event) {
-	var button = $(event.relatedTarget);
-	var companyId = button.data('company-id');
-	var id = button.data('id');
-	var date = button.data('date');
-	var start = button.data('start');
-	var end = button.data('end');
-	var location = button.data('location');
-	var job = button.data('job');
-	var status = button.data('status');
-	var motivation = button.data('motivation');
+    var button = $(event.relatedTarget);
+    var companyId = button.data('company-id');
+    var id = button.data('id');
+    var date = button.data('date');
+    var start = button.data('start');
+    var end = button.data('end');
+    var location = button.data('location');
+    var job = button.data('job');
+    var status = button.data('status');
+    var motivation = button.data('motivation');
 
-	var modal = $(this);
-	modal.find('#updateInterviewId').val(id);
-	modal.find('#updateInterviewDate').val(date);
-	modal.find('#updateStartTime').val(start);
-	modal.find('#updateEndTime').val(end);
-	modal.find('#updateLocation').val(location);
-	modal.find('#updateJobTitle').val(job);
-	modal.find('#updateSelectionStatus').val(status);
-	modal.find('#updateMotivation').val(motivation);
+    var modal = $(this);
+    modal.find('#updateInterviewId').val(id);
+    modal.find('#updateInterviewDate').val(date);
+    modal.find('#updateStartTime').val(start);
+    modal.find('#updateEndTime').val(end);
+    modal.find('#updateLocation').val(location);
+    modal.find('#updateJobTitle').val(job);
+    modal.find('#updateSelectionStatus').val(status);
+    modal.find('#updateMotivation').val(motivation);
 
-	var form = modal.find('#updateInterviewForm');
-	var actionUrl = form.attr('action').replace('{interviewId}', id);
-	form.attr('action', actionUrl);
+    var form = modal.find('#updateInterviewForm');
+    var actionUrl = form.attr('action').replace('{interviewId}', id);
+    form.attr('action', actionUrl);
 });
-
 
 // 更新用モーダルの終了時間を計算する関数
 function calculateUpdateEndTime() {
@@ -130,7 +162,7 @@ function calculateUpdateEndTime() {
 }
 
 // モーダルが表示される際にデフォルトで1時間後の終了時間を設定する
-window.onload = function() {
+$('#updateInterviewModal').on('show.bs.modal', function(event) {
     // 所要時間を1時間に設定
     document.getElementById("updateDuration").value = "60";
     
@@ -138,7 +170,7 @@ window.onload = function() {
     if (document.getElementById("updateStartTime").value) {
         calculateUpdateEndTime();
     }
-};
+});
 
 
 
