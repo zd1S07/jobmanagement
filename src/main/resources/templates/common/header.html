@@ -1,59 +1,71 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>共通ヘッダー</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- CSSファイルへのリンク -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>共通ヘッダー</title>
+<link rel="stylesheet" href="/css/styles.css">
+<!-- CSSファイルへのリンク -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand navbar-light bg-light">
-            <a class="navbar-brand">面接企業管理システム</a>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/home}">ホーム</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/company/list}">面接企業情報</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/motivation}">志望動機AI作成</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/logout}">ログアウト</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
+	<header>
+		<nav class="navbar navbar-expand navbar-light bg-light">
+			<a class="navbar-brand">面接企業管理システム</a>
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link" th:href="@{/home}">ホーム</a>
+				</li>
+				<li class="nav-item"><a class="nav-link"
+					th:href="@{/company/list}">面接企業情報</a></li>
+				<li class="nav-item"><a class="nav-link"
+					th:href="@{/motivation}">志望動機AI作成</a></li>
+				<li class="nav-item"><a class="nav-link"
+					th:href="@{https://jobtter.flutterflow.app/}" target="_blank">就活SNSサービス</a>
+				</li>
 
-     <button class="btn btn-primary sidebar-toggle" onclick="toggleSidebar()">☰</button>
+				<li class="nav-item"><a class="nav-link" th:href="@{/logout}">ログアウト</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
 
-    <!-- サイドバー -->
-    <aside class="sidebar" id="sidebar">
-        <h3>面接対策</h3>
-        <ul>
-            <li><a href="https://tenshoku.mynavi.jp/knowhow/mensetsu/" target="_blank">面接対策ガイド</a></li>
-            <li><a href="https://job.career-tasu.jp/guide/step/079/" target="_blank">よくある質問</a></li>
-            <li><a href="https://www.hellowork.mhlw.go.jp/member/career_doc01.html" target="_blank">応募書類の書き方</a></li>
-            <li><a href="https://job.career-tasu.jp/guide/" target="_blank">就活成功ガイド</a></li>
-            <li><a href="https://www.kurihaku.jp/direct/special/company/1412/" target="_blank">企業研究方法</a></li>
-        </ul>
-        <h3>求人検索</h3>
-        <ul>
-            <li><a href="https://tenshoku.mynavi.jp/knowhow/mensetsu/" target="_blank">Indeed</a></li>
-            <li><a href="https://job.career-tasu.jp/guide/step/079/" target="_blank">求人ボックス</a></li>
-            <li><a href="https://www.hellowork.mhlw.go.jp/kensaku/" target="_blank">ハローワーク</a></li>
-        </ul>
-        <h3>求人媒体</h3>
-        <ul>
-            <li><a href="https://employment.en-japan.com/" target="_blank">エン転職</a></li>
-            <li><a href="https://doda.jp/" target="_blank">doda</a></li>
-            <li><a href="https://type.jp/" target="_blank">type</a></li>
-            <li><a href="https://www.r-agent.com/" target="_blank">リクルートエージェント</a></li>
-            <li><a href="https://www.green-japan.com/" target="_blank">Green</a></li>
-        </ul>
-    </aside>
-      
+	<button class="btn btn-primary sidebar-toggle"
+		onclick="toggleSidebar()">☰</button>
+
+	<!-- サイドバー -->
+	<aside class="sidebar" id="sidebar">
+		<h3>面接対策</h3>
+		<ul>
+			<li><a href="https://tenshoku.mynavi.jp/knowhow/mensetsu/"
+				target="_blank">面接対策ガイド</a></li>
+			<li><a href="https://job.career-tasu.jp/guide/step/079/"
+				target="_blank">よくある質問</a></li>
+			<li><a
+				href="https://www.hellowork.mhlw.go.jp/member/career_doc01.html"
+				target="_blank">応募書類の書き方</a></li>
+			<li><a href="https://job.career-tasu.jp/guide/" target="_blank">就活成功ガイド</a></li>
+			<li><a
+				href="https://www.kurihaku.jp/direct/special/company/1412/"
+				target="_blank">企業研究方法</a></li>
+		</ul>
+		<h3>求人検索</h3>
+		<ul>
+			<li><a href="https://tenshoku.mynavi.jp/knowhow/mensetsu/"
+				target="_blank">Indeed</a></li>
+			<li><a href="https://job.career-tasu.jp/guide/step/079/"
+				target="_blank">求人ボックス</a></li>
+			<li><a href="https://www.hellowork.mhlw.go.jp/kensaku/"
+				target="_blank">ハローワーク</a></li>
+		</ul>
+		<h3>求人媒体</h3>
+		<ul>
+			<li><a href="https://employment.en-japan.com/" target="_blank">エン転職</a></li>
+			<li><a href="https://doda.jp/" target="_blank">doda</a></li>
+			<li><a href="https://type.jp/" target="_blank">type</a></li>
+			<li><a href="https://www.r-agent.com/" target="_blank">リクルートエージェント</a></li>
+			<li><a href="https://www.green-japan.com/" target="_blank">Green</a></li>
+		</ul>
+	</aside>
+
 </body>
 </html>

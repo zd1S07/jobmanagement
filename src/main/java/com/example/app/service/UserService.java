@@ -30,6 +30,8 @@ public class UserService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
+    
+    
 
     public String createPasswordResetToken(User user) {
         String token = UUID.randomUUID().toString();
@@ -42,5 +44,8 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         userRepository.save(user);
+    }
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }
