@@ -96,3 +96,9 @@ div:last-child {
     text-align: center;
     margin-top: 20px;
 }
+
+.success-message {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 20px;
+}

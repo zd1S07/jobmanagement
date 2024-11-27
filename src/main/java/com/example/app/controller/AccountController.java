@@ -1,7 +1,5 @@
 package com.example.app.controller;
 
-import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,12 +9,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.model.PasswordResetToken;
 import com.example.app.model.User;
 import com.example.app.repository.PasswordResetTokenRepository;
 import com.example.app.service.EmailService;
 import com.example.app.service.UserService;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/account")
@@ -42,8 +43,8 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public String createAccount(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
-        // 最初にバリデーションエラーをチェック
+    public String createAccount(@Valid @ModelAttribute("user") User user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        // バリデーションエラーをチェック
         if (result.hasErrors()) {
             return "account/create"; // バリデーションエラーがある場合、同じフォームページに戻る
         }
@@ -54,7 +55,12 @@ public class AccountController {
             return "account/create"; // エラーがあれば同じページを表示
         }
 
+        // ユーザー登録処理
         userService.registerUser(user);
+
+        // フラッシュ属性に成功メッセージを設定
+        redirectAttributes.addFlashAttribute("successMessage", "アカウントを作成しました。作成したアカウントでログインしましょう。");
+
         return "redirect:/account/login"; // 登録後にログインページへリダイレクト
     }
 
