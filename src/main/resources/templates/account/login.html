@@ -30,6 +30,10 @@
         </div>
     </form>
 	<div th:if="${param.logout}" style="color:green;">ログアウトに成功しました。</div>
+<!-- フラッシュメッセージを表示 -->
+    <div>
+        <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
+    </div>
 
 
     <div>

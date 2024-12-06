@@ -160,20 +160,20 @@
 		
 		<div class="container">
   <div class="container">
-  
-  
-  <!-- 埋め込むiframe -->
-  <iframe id="calendarIframe" frameborder="0" scrolling="no" style="display: none;"></iframe>
- <br>
- 
-   <!-- URL入力フォーム -->
+
+    <!-- 埋め込むiframe -->
+    <iframe id="calendarIframe" frameborder="0" scrolling="no" style="display: none; width: 100%; height: 500px;"></iframe>
+    <br>
+
+    <!-- URL入力フォーム -->
     <form id="embedForm">
-        <label for="calendarEmbedCode">Googleカレンダーの埋め込みコードを貼り付けてください<br>（例：&lt;iframe src="...">&lt;/iframe>の形式）</label>
+        <label for="calendarEmbedCode">Googleカレンダーの埋め込みコードを貼り付けてください<br>
+            （例：&lt;iframe src="...">&lt;/iframe>の形式）</label>
         <input type="text" id="calendarEmbedCode" name="calendarEmbedCode" required style="width: 100%; padding: 8px;">
         <button type="button" onclick="embedCalendar()">カレンダーを埋め込む</button>
+        <button type="button" onclick="removeCalendar()">同期を解除</button> <!-- 解除ボタンを追加 -->
     </form>
 
-  
 </div>
 
 
