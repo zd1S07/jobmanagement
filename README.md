@@ -16,10 +16,75 @@
 - 志望動機AI作成
 - 情報交換SNS（外部で作成）
 
-## デモ画像
-![デモ画像](https://example.com/demo.png)
+# デモ画像一覧
 
-## インストール方法
-1. リポジトリをクローンします：
-   ```bash
-   git clone https://github.com/yourusername/yourproject.git
+以下はプロジェクトで使用されるデモ画像の一覧です。
+
+## **1. アカウント作成画面**
+![デモ画像1](src/main/resources/static/demo_images/162138.png)
+
+
+
+---
+
+
+
+## **2. ログイン画面**
+![デモ画像2](src/main/resources/static/demo_images/162156.png)
+
+
+---
+
+## **3. パスワードリセット**
+![デモ画像3](src/main/resources/static/demo_images/162209.png)
+
+
+
+---
+
+## **4. ホーム画面**
+![デモ画像4](src/main/resources/static/demo_images/162222.png)
+
+
+---
+
+## **5. 情報表示画面1**
+![デモ画像5](src/main/resources/static/demo_images/162238.png)
+
+
+
+---
+
+## **6. 情報表示画面2**
+![デモ画像6](src/main/resources/static/demo_images/162248.png)
+
+
+
+---
+
+## **7. メール作成画面**
+![デモ画像7](src/main/resources/static/demo_images/162301.png)
+
+
+
+---
+## **8. 志望動機AI作成画面**
+![デモ画像8](src/main/resources/static/demo_images/162312.png)
+
+
+
+---
+
+## **9. 外部作成SNSユーザー認証画面**
+![デモ画像9](src/main/resources/static/demo_images/162325.png)
+
+
+
+
+## **10. 外部作成SMSメイン画面**
+![デモ画像10](src/main/resources/static/demo_images/162338.png)
+
+
+
+
+
